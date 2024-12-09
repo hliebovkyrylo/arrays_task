@@ -1,52 +1,33 @@
-function swapRowsWithMaxAndMinElements(matrix: number[][]): number[][] {
-  // Знаходимо індекс рядка з максимальним елементом
-  let maxRowIndex = 0;
-  let maxElement = matrix[0][0];
+function bitwiseComparison(
+  arr1: number[],
+  arr2: number[]
+): { decimal: number; hex: string }[] {
+  const result = arr1.map((num1, i) => {
+    const num2 = arr2[i];
+    const bitwiseResult = num1
+      .toString(2)
+      .padStart(16, "0")
+      .split("")
+      .map((bit, index) =>
+        bit === num2.toString(2).padStart(16, "0")[index] ? "1" : "0"
+      )
+      .join("");
 
-  // Знаходимо індекс рядка з мінімальним елементом
-  let minRowIndex = 0;
-  let minElement = matrix[0][0];
+    const decimalResult = parseInt(bitwiseResult, 2);
+    const hexResult = decimalResult.toString(16).toUpperCase();
+    return { decimal: decimalResult, hex: hexResult };
+  });
 
-  // Пошук максимального та мінімального елементів
-  for (let i = 0; i < matrix.length; i++) {
-    for (let j = 0; j < matrix[i].length; j++) {
-      if (matrix[i][j] > maxElement) {
-        maxElement = matrix[i][j];
-        maxRowIndex = i;
-      }
-
-      if (matrix[i][j] < minElement) {
-        minElement = matrix[i][j];
-        minRowIndex = i;
-      }
-    }
-  }
-
-  // Створюємо копію матриці для уникнення змін в оригіналі
-  const newMatrix = matrix.map((row) => [...row]);
-
-  // Міняємо рядки місцями
-  if (maxRowIndex !== minRowIndex) {
-    [newMatrix[maxRowIndex], newMatrix[minRowIndex]] = [
-      newMatrix[minRowIndex],
-      newMatrix[maxRowIndex],
-    ];
-  }
-
-  return newMatrix;
+  return result;
 }
 
-// Приклад використання
-const matrix = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9],
-];
+// Приклад масивів
+const arr1 = [45158, 12345, 56789, 54321, 22222, 10000, 9999, 1234, 5678, 8765];
+const arr2 = [7125, 54321, 12345, 67890, 11111, 20000, 8888, 5678, 4321, 7654];
 
-console.log("Матриця до перестановки:");
-console.table(matrix);
+const result = bitwiseComparison(arr1, arr2);
 
-const result = swapRowsWithMaxAndMinElements(matrix);
-
-console.log("Матриця після перестановки:");
-console.table(result);
+// Виведення результатів
+result.forEach((res, i) => {
+  console.log(`Result [${i}]: Decimal: ${res.decimal}, Hex: ${res.hex}`);
+});
